@@ -21,7 +21,8 @@
         "symfony/templating": "6.1.*",
         "symfony/twig-bundle": "6.1.*",
         "symfony/uid": "6.1.*",
-        "symfony/yaml": "6.1.*"
+        "symfony/yaml": "6.1.*",
+        "ext-openssl": "*"
     },
     "config": {
         "allow-plugins": {

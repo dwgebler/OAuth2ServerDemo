@@ -26,6 +26,7 @@ final class AccessToken implements AccessTokenEntityInterface
             ->expiresAt($this->getExpiryDateTime())
             ->relatedTo((string) $this->getUserIdentifier())
             ->withClaim('scopes', $this->getScopes())
+            ->withClaim('kid', '1')
             ->withClaim('custom', ['foo' => 'bar'])
             ->getToken($this->jwtConfiguration->signer(), $this->jwtConfiguration->signingKey());
     }

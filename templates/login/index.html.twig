@@ -20,7 +20,6 @@
 
 <form action="{{ path('app_login') }}" method="post" class="w3-container">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-    {#  <input type="hidden" name="_target_path" value="{{ path('oauth2_authorize') }}"> #}
     <p>
         <label class="w3-text-theme" for="username"><strong>Email address</strong></label>
         <input class="w3-input w3-border w3-light-grey" tabindex="1" type="email" required id="username" name="_username" value="{{ last_username }}">
