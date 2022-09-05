@@ -53,6 +53,12 @@ class LoginController extends AbstractController
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
 
+    /**
+     * I know this controller is fat, bloated and ugly. But it's just a demo and I feel
+     * keeping all the logic in one place makes it easier to follow as a tutorial.
+     * And of course I don't get paid to write these blog posts.
+     * In the real world, we would factor this out in to some pretty services...
+     */
     #[Route('/consent', name: 'app_consent', methods: ['GET', 'POST'])]
     public function consent(Request $request): Response
     {
@@ -127,39 +133,5 @@ class LoginController extends AbstractController
             'has_existing_scopes' => $hasExistingScopes,
             'existing_scopes' => $existingScopes,
         ]);
-    }
-
-    #[Route('/login-user/{userid}', name: 'app_prog_login', methods: ['GET'])]
-    public function loginAsUser(int $userid, TokenStorageInterface $storage): Response
-    {
-        $user = $this->em->getRepository(User::class)->findOneBy(['id' => $userid]);
-        if ($user) {
-            $storage->setToken(
-                new UsernamePasswordToken(
-                    $user,
-                    'main',
-                    $user->getRoles()
-                )
-            );
-            return $this->redirectToRoute('app_index');
-        }
-        return $this->redirectToRoute('app_login');
-    }
-
-    #[Route('/create-user', name: 'app_create_user', methods: ['GET'])]
-    public function createUser()
-    {
-        $user = new User();
-        $user->setEmail('me@davegebler.com');
-        $user->setPassword($this->passwordEncoder->hashPassword(
-            $user,
-            'admin'
-        ));
-        $user->setRoles(['ROLE_SUPER_ADMIN']);
-        $user->setUuid(new UuidV1());
-        $entityManager = $this->em->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
-        return new Response('Saved new user with id '.$user->getId());
     }
 }
