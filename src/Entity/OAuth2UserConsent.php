@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\OAuth2UserConsentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use League\Bundle\OAuth2ServerBundle\Model\Client;
 
 #[ORM\Entity(repositoryClass: OAuth2UserConsentRepository::class)]
 class OAuth2UserConsent
@@ -29,6 +30,10 @@ class OAuth2UserConsent
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $ipAddress = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(referencedColumnName: 'identifier', nullable: false)]
+    private ?Client $client = null;
 
     public function getId(): ?int
     {
@@ -91,6 +96,18 @@ class OAuth2UserConsent
     public function setIpAddress(?string $ipAddress): self
     {
         $this->ipAddress = $ipAddress;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

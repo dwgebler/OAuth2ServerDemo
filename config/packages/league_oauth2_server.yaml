@@ -54,7 +54,7 @@ league_oauth2_server:
   scopes:
     # Scopes that you wish to utilize in your application.
     # This should be a simple array of strings.
-    available:               ['email','profile','openid']
+    available:               ['email', 'profile', 'blog_read', 'blog_write']
 
     # Scopes that will be assigned when no scope given.
     # This should be a simple array of strings.

@@ -102,7 +102,8 @@ class LoginController extends AbstractController
         $scopeNames = [
             'profile' => 'Your profile',
             'email' => 'Your email address',
-            'openid' => 'Your OpenID',
+            'blog_read' => 'Your blog posts (read)',
+            'blog_write' => 'Your blog posts (write)',
         ];
 
         // Get all the scope names in the requested scopes.
@@ -116,6 +117,7 @@ class LoginController extends AbstractController
                 $consents = $user->getOAuth2UserConsent() ?? new OAuth2UserConsent();;
                 $consents->setScopes(array_merge($requestedScopes, $userScopes));
                 $consents->setUser($user);
+                $consents->setClient($appClient);
                 $consents->setCreated(new \DateTimeImmutable());
                 $consents->setExpires(new \DateTimeImmutable('+30 days'));
                 $consents->setIpAddress($request->getClientIp());

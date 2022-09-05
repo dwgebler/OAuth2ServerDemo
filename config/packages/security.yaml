@@ -49,14 +49,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/authorize, roles: PUBLIC_ACCESS }
         - { path: ^/login, role: PUBLIC_ACCESS }
         - { path: ^/token, role: PUBLIC_ACCESS }
+        - { path: ^/.well-known, roles: PUBLIC_ACCESS }
         - { path: ^/api, role: ROLE_OAUTH2_EMAIL }
-        #- { path: ^/consent, roles: PUBLIC_ACCESS, allow_if: "not has_role('ROLE_USER')" }
-        #- { path: ^/login, role: PUBLIC_ACCESS, allow_if: "not has_role('ROLE_USER')" }
         - { path: ^/, role: ROLE_USER }
 
 when@test:

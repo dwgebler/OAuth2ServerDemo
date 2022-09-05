@@ -1,0 +1,7 @@
+{
+    "require": {
+        "firebase/php-jwt": "^6.3",
+        "ext-openssl": "*",
+        "ext-curl": "*"
+    }
+}
