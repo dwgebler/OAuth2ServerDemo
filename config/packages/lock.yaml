@@ -1,0 +1,3 @@
+framework:
+    lock: '%env(LOCK_DSN)%'
+    #lock: 'sqlite:///%kernel.project_dir%/var/lock.db'

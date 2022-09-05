@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="w3-row">
+        <div class="w3-card w3-mobile w3-display-middle w3-third w3-white">
+            <div class="w3-container w3-theme">
+                <h2>{{ app_name }} - Sign In</h2>
+            </div>
+
+            <div class="w3-container w3-center">
+                <img src="{{ asset('assets/icons/logo.svg') }}" alt="Geb Test" class="w3-image">
+            </div>
+
+            <div class="w3-container">
+                <p><strong>{{ app_name }}</strong> would like to access the following {% if has_existing_scopes %}additional {% endif %}information about you:</p>
+                <ul>
+                    {% for scope in scopes %}
+                    <li>{{ scope }}</li>
+                    {% endfor %}
+                </ul>
+                {% if has_existing_scopes %}
+                <p>{{ app_name }} can already access the following information:</p>
+                <ul>
+                    {% for scope in existing_scopes %}
+                    <li>{{ scope }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <p>To allow this access, click the button below.</p>
+            </div>
+
+
+            <form action="{{ path('app_consent', app.request.query.all) }}" method="post" class="w3-container">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('consent') }}">
+                <p>
+                    <button class="w3-button w3-black w3-block w3-ripple w3-hover-dark-gray" tabindex="1" type="submit" name="consent" value="yes">Allow</button>
+                </p>
+                <p>
+                    <button class="w3-button w3-dark-red w3-block w3-ripple w3-hover-dark-red" tabindex="2" type="submit" name="consent" value="no">Deny</button>
+                </p>
+                <p><a class="w3-text-blue w3-hover-text-blue-gray" href="#">Manage app access to your information</a></p>
+            </form>
+        </div>
+    </div>
+{% endblock %}

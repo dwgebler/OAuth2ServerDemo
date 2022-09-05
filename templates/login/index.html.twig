@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="w3-row">
+<div class="w3-card w3-mobile w3-display-middle w3-third w3-white">
+<div class="w3-container w3-theme">
+    <h2>Login</h2>
+</div>
+
+{% if error %}
+<div class="w3-panel w3-pale-red w3-display-container w3-border">
+    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">×</span>
+    <h3>Error</h3>
+    <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+</div>
+{% endif %}
+
+<div class="w3-container w3-center">
+    <img src="{{ asset('assets/icons/logo.svg') }}" alt="Geb Test" class="w3-image">
+</div>
+
+<form action="{{ path('app_login') }}" method="post" class="w3-container">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    {#  <input type="hidden" name="_target_path" value="{{ path('oauth2_authorize') }}"> #}
+    <p>
+        <label class="w3-text-theme" for="username"><strong>Email address</strong></label>
+        <input class="w3-input w3-border w3-light-grey" tabindex="1" type="email" required id="username" name="_username" value="{{ last_username }}">
+    </p>
+
+    <p>
+        <label class="w3-text-theme" for="password"><strong>Password</strong></label>
+        <input class="w3-input w3-border w3-light-grey" tabindex="2" type="password" required id="password" name="_password">
+        <a href="#" class="w3-text-blue w3-hover-text-blue-gray" tabindex="5">Forgot your password?</a>
+    </p>
+    <p>
+        <button class="w3-button w3-black w3-block w3-ripple w3-hover-dark-gray" tabindex="3" type="submit">Login</button>
+    </p>
+    <p class="w3-center">Need an account? <a href="#" class="w3-text-blue w3-hover-text-blue-gray" tabindex="4">Sign up</a></p>
+</form>
+</div>
+</div>
+{% endblock %}
