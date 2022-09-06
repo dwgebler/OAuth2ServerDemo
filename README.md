@@ -7,10 +7,14 @@ This is the sample app accompanying my blog post at https://davegebler.com/
 1. Clone this repo
 2. Ensure you have Docker Engine >= 17.05 installed. https://docs.docker.com/get-docker/
 3. Run `docker compose up -d`
-4. Run `docker exec -ti oauth2serverdemo_web_1 composer install`
-5. Run `docker exec -ti oauth2serverdemo_web_1 bin/console doctrine:database:create`
-6. Run `docker exec -ti oauth2serverdemo_web_1 bin/console app:bootstrap --redirect-uris=http://localhost:8080/callback`
-7. Visit http://localhost:8080 in your browser and click the single sign-on link to see the app in action.
+4. Run the included `setup.sh` script to install dependencies and create the database, or to do these steps manually:
+   1. `mkdir -p var/keys`
+   2. `openssl genrsa -out var/keys/private.key 2048`
+   3. `openssl rsa -in var/keys/private.key -pubout -out var/keys/public.key`
+   4. `docker exec oauth2-server composer install`
+   5. `docker exec oauth2-server bin/console doctrine:database:create`
+   6. `docker exec oauth2-server bin/console app:bootstrap`
+5. Visit http://localhost:8080 in your browser and click the single sign-on link to see the app in action.
    1. The username is `me@davegebler.com` and the password is `password`
 
 ## Setup instructions - manual

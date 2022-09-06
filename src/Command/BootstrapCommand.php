@@ -35,7 +35,7 @@ class BootstrapCommand extends Command
         $this
             ->addOption('email', null, InputOption::VALUE_REQUIRED, 'User email adddress', 'me@davegebler.com')
             ->addOption('password', null, InputOption::VALUE_REQUIRED, 'User password', 'password')
-            ->addOption('redirect-uris', null, InputOption::VALUE_REQUIRED, 'Redirect URIs', 'http://localhost:8080/login/callback')
+            ->addOption('redirect-uris', null, InputOption::VALUE_REQUIRED, 'Redirect URIs', 'http://localhost:8080/callback')
         ;
     }
 
