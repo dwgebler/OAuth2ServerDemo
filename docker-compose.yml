@@ -11,7 +11,7 @@ services:
       dockerfile: ./docker/Dockerfile
       context: .
       args:
-        WITH_XDEBUG: 0 # Change to 1 to install and enable xdebug in the container
+        WITH_XDEBUG: "false" # Change to "true" to install and enable xdebug in the container
     container_name: oauth-server
     volumes:
       - ./:/var/www/application
