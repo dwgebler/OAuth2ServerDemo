@@ -3,10 +3,10 @@ version: '3'
 services:
   web:
     ports:
-        - "8082:80"
+        - "8000:80"
   clientapp:
     ports:
-        - "8083:80"
+        - "8080:80"
 ####> doctrine/doctrine-bundle ###
 #  database:
 #    ports:

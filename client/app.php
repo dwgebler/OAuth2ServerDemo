@@ -30,10 +30,10 @@ HTML;
     private string $clientId = 'testclient';
     private string $clientSecret = 'testpass';
     private string $redirectUri = 'http://localhost:8080/callback';
-    private string $authServer = 'https://localhost:8000/authorize';
-    private string $tokenServer = 'https://localhost:8000/token';
-    private string $jwksUri = 'https://localhost:8000/.well-known/jwks.json';
-    private string $apiUri = 'https://localhost:8000/api/test';
+    private string $authServer = 'http://localhost:8000/authorize';
+    private string $tokenServer = 'http://localhost:8000/token';
+    private string $jwksUri = 'http://localhost:8000/.well-known/jwks.json';
+    private string $apiUri = 'http://localhost:8000/api/test';
 
     private function getRequestPath(): string
     {

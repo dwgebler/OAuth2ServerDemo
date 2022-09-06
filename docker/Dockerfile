@@ -5,7 +5,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     openssl \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip \
+    && pecl install xdebug && docker-php-ext-enable xdebug
+COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 WORKDIR /var/www/application/var/keys
 RUN openssl genrsa -out private.key 2048
 RUN openssl rsa -in private.key -pubout -out public.key

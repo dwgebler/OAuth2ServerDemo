@@ -35,7 +35,7 @@ class BootstrapCommand extends Command
         $this
             ->addOption('email', null, InputOption::VALUE_REQUIRED, 'User email adddress', 'me@davegebler.com')
             ->addOption('password', null, InputOption::VALUE_REQUIRED, 'User password', 'password')
-            ->addOption('redirect_uris', null, InputOption::VALUE_REQUIRED, 'Redirect URIs', 'http://localhost:8080/login/callback')
+            ->addOption('redirect-uris', null, InputOption::VALUE_REQUIRED, 'Redirect URIs', 'http://localhost:8080/login/callback')
         ;
     }
 
@@ -52,7 +52,7 @@ class BootstrapCommand extends Command
         $clientDescription = 'Test Client App';
         $scopes = ['profile', 'email', 'blog_read'];
         $grantTypes = ['authorization_code', 'refresh_token'];
-        $redirectUris = explode(',', $input->getOption('redirect_uris'));
+        $redirectUris = explode(',', $input->getOption('redirect-uris'));
 
         // Create the user
         $user = new User();

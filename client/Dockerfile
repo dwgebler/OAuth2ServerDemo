@@ -16,7 +16,6 @@ COPY composer.lock /var/www/html/composer.lock
 COPY [".htaccess", "/var/www/html/.htaccess"]
 RUN composer install
 # Replace localhost:8000 in app.php with oauth2serverdemo_web_1
-RUN sed -i 's/localhost:8000/oauth2serverdemo_web_1/g' /var/www/html/app.php
+RUN sed -i 's/localhost:8000/oauth-server/g' /var/www/html/app.php
 # Replace oauth2serverdemo_web_1/authorize with localhost:8000/authorize
-RUN sed -i 's/oauth2serverdemo_web_1\/authorize/localhost:8000\/authorize/g' /var/www/html/app.php
-
+RUN sed -i 's/oauth-server\/authorize/localhost:8000\/authorize/g' /var/www/html/app.php

@@ -4,11 +4,11 @@ services:
   clientapp:
     image: gebler/clientapp
     build: ./client
+    container_name: oauth-client-app
   web:
     image: gebler/web
-    build:
-      dockerfile: ./docker/Dockerfile
-      context: .
+    build: ./docker
+    container_name: oauth-server
     volumes:
       - ./:/var/www/application
 ####> doctrine/doctrine-bundle ###
