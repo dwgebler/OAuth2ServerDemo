@@ -6,8 +6,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     openssl \
-    && docker-php-ext-install zip \
-# If xdebug is enabled, install it \
+    && docker-php-ext-install zip
 RUN if [ "$WITH_XDEBUG" = "true" ]; then \
     pecl install xdebug \
     && docker-php-ext-enable xdebug \
