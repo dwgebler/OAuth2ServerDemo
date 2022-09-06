@@ -1,8 +1,14 @@
 version: '3'
 
 services:
-###> doctrine/doctrine-bundle ###
-  database:
+  web:
     ports:
-      - "5432"
-###< doctrine/doctrine-bundle ###
+        - "8082:80"
+  clientapp:
+    ports:
+        - "8083:80"
+####> doctrine/doctrine-bundle ###
+#  database:
+#    ports:
+#      - "5432"
+####< doctrine/doctrine-bundle ###
