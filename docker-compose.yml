@@ -7,7 +7,11 @@ services:
     container_name: oauth-client-app
   web:
     image: gebler/web
-    build: ./docker
+    build:
+      dockerfile: ./docker/Dockerfile
+      context: .
+      args:
+        WITH_XDEBUG: 0 # Change to 1 to install and enable xdebug in the container
     container_name: oauth-server
     volumes:
       - ./:/var/www/application
