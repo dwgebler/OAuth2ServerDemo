@@ -7,13 +7,7 @@ This is the sample app accompanying my blog post at https://davegebler.com/
 1. Clone this repo
 2. Ensure you have Docker Engine >= 17.05 installed. https://docs.docker.com/get-docker/
 3. Run `docker compose up -d`
-4. Run the included `setup.sh` script to install dependencies and create the database, or to do these steps manually:
-   1. `mkdir -p var/keys`
-   2. `openssl genrsa -out var/keys/private.key 2048`
-   3. `openssl rsa -in var/keys/private.key -pubout -out var/keys/public.key`
-   4. `docker exec oauth2-server composer install`
-   5. `docker exec oauth2-server bin/console doctrine:database:create`
-   6. `docker exec oauth2-server bin/console app:bootstrap`
+4. Run the included `setup.sh` script to install dependencies and create the database.
 5. Visit http://localhost:8080 in your browser and click the single sign-on link to see the app in action.
    1. The username is `me@davegebler.com` and the password is `password`
 
@@ -29,6 +23,7 @@ This is the sample app accompanying my blog post at https://davegebler.com/
    2. `openssl rsa -in private.key -pubout -out public.key`
 7. If necessary, make the `bin/console` script executable: `chmod +x bin/console`
 8. Run `bin/console doctrine:database:create` to create the SQLite database.
+9. Run `bin/console doctrine:schema:create` to create the database tables.
 9. Run `bin/console app:bootstrap` to bootstrap the database with the demo data.
    1. Run `bin/console app:bootstrap --help` for more options.
    2. Otherwise the default user is `me@davegebler.com` with password `password`.
