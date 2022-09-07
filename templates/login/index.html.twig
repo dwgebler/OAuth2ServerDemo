@@ -6,26 +6,22 @@
 <div class="w3-container w3-theme">
     <h2>Log in</h2>
 </div>
-
-{% if error %}
-<div class="w3-panel w3-pale-red w3-display-container w3-border">
-    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">×</span>
-    <h3>Error</h3>
-    <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
-</div>
-{% endif %}
-
 <div class="w3-container w3-center">
     <img src="{{ asset('assets/icons/logo.svg') }}" alt="Geb Test" class="w3-image">
 </div>
-
 <form action="{{ path('app_login') }}" method="post" class="w3-container">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    {% if error %}
+        {% if error.messageKey == 'Invalid credentials.' %}
+            <p class="w3-error">Invalid email address or password. Please check your details and try again.</p>
+        {% else %}
+            <p class="w3-error">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+        {% endif %}
+    {% endif %}
     <p>
         <label class="w3-text-theme" for="username"><strong>Email address</strong></label>
         <input class="w3-input w3-border w3-light-grey" tabindex="1" type="email" required id="username" name="_username" value="{{ last_username }}">
     </p>
-
     <p>
         <label class="w3-text-theme" for="password"><strong>Password</strong></label>
         <input class="w3-input w3-border w3-light-grey" tabindex="2" type="password" required id="password" name="_password">
