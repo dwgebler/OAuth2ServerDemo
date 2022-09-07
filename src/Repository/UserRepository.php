@@ -66,7 +66,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
             return $this->findOneBy(['email' => $identifier]);
         }
-        return $this->findOneBy(['uuid' => Uuid::fromString($identifier)->toBinary()]);
+        if (Uuid::isValid($identifier)) {
+            return $this->findOneBy(['uuid' => Uuid::fromString($identifier)->toBinary()]);
+        }
+        return null;
     }
 
 //    /**
