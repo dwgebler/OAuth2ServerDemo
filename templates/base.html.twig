@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" type="image/svg+xml" href="{{ asset('assets/icons/icon.svg') }}">
+        <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('assets/icons/icon.svg') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/w3.css?v=1.0') }}">
         <style>
             body {
@@ -26,6 +26,16 @@
                 color: #fff !important;
                 background-color: #b71c1c !important;
             }
+            @media screen and (max-width: 600px) and (max-height: 600px) {
+                .w3-display-middle {
+                    position: static;
+                    transform: none;
+                    top: 0;
+                    left: 0;
+                    -ms-transform: none;
+                }
+            }
+
             a {
                 text-decoration: none;
             }
