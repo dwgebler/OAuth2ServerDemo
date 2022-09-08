@@ -13,9 +13,9 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
     {% if error %}
         {% if error.messageKey == 'Invalid credentials.' %}
-            <p class="w3-error">Invalid email address or password.<br>Please check your details and try again.</p>
+            <p class="w3-error">&#x26D4;&#xFE0F; Invalid email address or password.<br>Please check your details and try again.</p>
         {% else %}
-            <p class="w3-error">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+            <p class="w3-error">&#x26D4;&#xFE0F; {{ error.messageKey|trans(error.messageData, 'security') }}</p>
         {% endif %}
     {% endif %}
     <p>
