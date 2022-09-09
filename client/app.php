@@ -13,19 +13,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 // bin/console league:oauth2-server:create-client "Test Client" testclient testpass --scope=email --scope=profile --scope=blog_read --grant-type=refresh_token --grant_type=authorization_code --redirect-uri=http://localhost:8080/callback
 class App
 {
-    private string $htmlTemplate = <<<HTML
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>OAuth2 Client</title>
-    </head>
-    <body>
-        <h1>OAuth2 Client</h1>
-        <p>Click the link below to start the OAuth2 flow.</p>
-        <p><a href="/login">Login via Single Sign On</a></p>
-        [CONTENT]
-    </body>
-HTML;
+    private string $htmlTemplate = '';
 
     private string $clientId = 'testclient';
     private string $clientSecret = 'testpass';
@@ -35,10 +23,22 @@ HTML;
     private string $jwksUri = 'http://localhost:8000/.well-known/jwks.json';
     private string $apiUri = 'http://localhost:8000/api/test';
 
+    public function __construct()
+    {
+        $this->htmlTemplate = file_get_contents(__DIR__ . '/template.html');
+    }
+
     private function getRequestPath(): string
     {
         $requestUri = $_SERVER['REQUEST_URI'];
         return parse_url($requestUri, PHP_URL_PATH);
+    }
+
+    private function render(string $content)
+    {
+        $html = str_replace('[CONTENT]', $content, $this->htmlTemplate);
+        echo $html;
+        exit;
     }
 
     public function run()
@@ -90,19 +90,19 @@ HTML;
         if (isset($_COOKIE['access_token'])) {
             $content = '<p><a href="/api">Call API</a></p><p><a href="/logout">Logout</a></p>';
         }
-        echo str_replace('[CONTENT]', $content, $this->htmlTemplate);
+        $this->render($content);
     }
 
     private function callbackAction()
     {
         $code = $_GET['code'] ?? null;
         if (null === $code) {
-            echo 'No code provided<br>';
+            $content = 'No code provided<br>';
             if (isset($_GET['error_description'])) {
-                echo 'Error: ' . $_GET['error_description'] . '<br>';
+                $content .= 'Error: ' . $_GET['error_description'] . '<br>';
             }
-            echo '<a href="/">Back</a>';
-            exit(1);
+            $content .= '<a href="/">Back</a>';
+            $this->render($content);
         }
         // Swap the code for an access token.
         $params = [
@@ -122,13 +122,14 @@ HTML;
         $response = curl_exec($ch);
         $response = json_decode($response, true);
         $accessToken = $response['access_token'] ?? null;
+        $content = '';
         if (!$accessToken) {
-            echo 'No access token provided<br>';
+            $content = 'No access token provided<br>';
             if (isset($response['hint'])) {
-                echo 'Error: ' . $response['hint'] . '<br>';
+                $content .= 'Error: ' . $response['hint'] . '<br>';
             }
-            echo '<a href="/">Back</a>';
-            exit(1);
+            $content .= '<a href="/">Back</a>';
+            $this->render($content);
         }
         try {
             $streamContext = stream_context_create([
@@ -139,14 +140,10 @@ HTML;
             ]);
             $jwks = JWK::parseKeySet(json_decode(file_get_contents($this->jwksUri, context: $streamContext), true));
             JWT::$leeway = 10;
-            $jwt = JWT::decode($accessToken, $jwks[1]);
+            JWT::decode($accessToken, $jwks[1]);
         } catch (\Exception $e) {
-            echo 'Error decoding JWT: ' . $e->getMessage();
-            exit(1);
-        }
-        if (null === $accessToken) {
-            echo 'No access token provided';
-            exit(1);
+            $content = 'Error decoding JWT: ' . $e->getMessage();
+            $this->render($content);
         }
         // Save the access token in a cookie.
         setcookie('access_token', $accessToken, time() + 3600);
@@ -159,8 +156,7 @@ HTML;
         // Get the access token from the cookie.
         $accessToken = $_COOKIE['access_token'] ?? null;
         if (null === $accessToken) {
-            echo 'No access token provided';
-            exit(1);
+            $this->render('No access token provided');
         }
         // Call the API.
         $ch = curl_init($this->apiUri);
@@ -173,9 +169,11 @@ HTML;
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         $response = curl_exec($ch);
         $response = json_decode($response, true);
-        echo '<pre>';
-        print_r($response);
-        echo '</pre>';
+        $content = '<p>Calling API on ' . $this->apiUri . '<br>';
+        $content .= 'With access token ' . $accessToken . '</p>';
+        $content .= 'Response: <div class="w3-code"><pre>' . print_r($response, true) . '</pre></div><br>';
+        $content .= '<a href="/">Back</a>';
+        $this->render($content);
     }
 
     private function logoutAction()
