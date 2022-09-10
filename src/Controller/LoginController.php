@@ -83,7 +83,10 @@ class LoginController extends AbstractController
         // Check if the user has already consented to the scopes
         /** @var User $user */
         $user = $this->getUser();
-        $userScopes = $user->getOAuth2UserConsent()?->getScopes() ?? [];
+        $userConsents = $user->getOAuth2UserConsents()->filter(
+            fn (OAuth2UserConsent $consent) => $consent->getClient() === $appClient
+        )->first() ?: null;
+        $userScopes = $userConsents?->getScopes() ?? [];
         $hasExistingScopes = count($userScopes) > 0;
 
         // If user has already consented to the scopes, give consent
@@ -111,13 +114,13 @@ class LoginController extends AbstractController
             if ($request->request->get('consent') === 'yes') {
                 $request->getSession()->set('consent_granted', true);
                 // Add the requested scopes to the user's scopes
-                $consents = $user->getOAuth2UserConsent() ?? new OAuth2UserConsent();;
+                $consents = $userConsents ?? new OAuth2UserConsent();;
                 $consents->setScopes(array_merge($requestedScopes, $userScopes));
-                $consents->setUser($user);
                 $consents->setClient($appClient);
                 $consents->setCreated(new \DateTimeImmutable());
                 $consents->setExpires(new \DateTimeImmutable('+30 days'));
                 $consents->setIpAddress($request->getClientIp());
+                $user->addOAuth2UserConsent($consents);
                 $this->em->getManager()->persist($consents);
                 $this->em->getManager()->flush();
             }

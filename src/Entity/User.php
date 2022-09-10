@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -32,8 +34,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $uuid = null;
 
-    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?OAuth2UserConsent $oAuth2UserConsent = null;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: OAuth2UserConsent::class, orphanRemoval: true)]
+    private Collection $oAuth2UserConsents;
+
+    public function __construct()
+    {
+        $this->oAuth2UserConsents = new ArrayCollection();
+    }
 
     public function getSalt(): ?string
     {
@@ -122,19 +129,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getOAuth2UserConsent(): ?OAuth2UserConsent
+    /**
+     * @return Collection<int, OAuth2UserConsent>
+     */
+    public function getOAuth2UserConsents(): Collection
     {
-        return $this->oAuth2UserConsent;
+        return $this->oAuth2UserConsents;
     }
 
-    public function setOAuth2UserConsent(OAuth2UserConsent $oAuth2UserConsent): self
+    public function addOAuth2UserConsent(OAuth2UserConsent $oAuth2UserConsent): self
     {
-        // set the owning side of the relation if necessary
-        if ($oAuth2UserConsent->getUser() !== $this) {
+        if (!$this->oAuth2UserConsents->contains($oAuth2UserConsent)) {
+            $this->oAuth2UserConsents->add($oAuth2UserConsent);
             $oAuth2UserConsent->setUser($this);
         }
 
-        $this->oAuth2UserConsent = $oAuth2UserConsent;
+        return $this;
+    }
+
+    public function removeOAuth2UserConsent(OAuth2UserConsent $oAuth2UserConsent): self
+    {
+        if ($this->oAuth2UserConsents->removeElement($oAuth2UserConsent)) {
+            // set the owning side to null (unless already changed)
+            if ($oAuth2UserConsent->getUser() === $this) {
+                $oAuth2UserConsent->setUser(null);
+            }
+        }
 
         return $this;
     }

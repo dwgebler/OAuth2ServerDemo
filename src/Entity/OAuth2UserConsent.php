@@ -15,10 +15,6 @@ class OAuth2UserConsent
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'oAuth2UserConsent', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $created = null;
 
@@ -34,6 +30,10 @@ class OAuth2UserConsent
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(referencedColumnName: 'identifier', nullable: false)]
     private ?Client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'oAuth2UserConsents')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
